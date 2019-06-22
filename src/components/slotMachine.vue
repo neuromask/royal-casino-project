@@ -92,27 +92,27 @@
                 el: '#numberBox',
                 slots: [{
                     items: [
-                        {label: 'CHERRY', src: require('../assets/img/cherry.png')},
-                        {label: '7', src: require('../assets/img/7.png')},
                         {label: '3xBAR', src: require('../assets/img/3xBAR.png')},
+                        {label: 'BAR', src: require('../assets/img/BAR.png')},
                         {label: '2xBAR', src: require('../assets/img/2xBAR.png')},
-                        {label: 'BAR', src: require('../assets/img/BAR.png')}
+                        {label: '7', src: require('../assets/img/7.png')},
+                        {label: 'CHERRY', src: require('../assets/img/cherry.png')}
                     ]
                 }, {
                     items: [
-                        {label: 'CHERRY', src: require('../assets/img/cherry.png')},
-                        {label: '7', src: require('../assets/img/7.png')},
                         {label: '3xBAR', src: require('../assets/img/3xBAR.png')},
+                        {label: 'BAR', src: require('../assets/img/BAR.png')},
                         {label: '2xBAR', src: require('../assets/img/2xBAR.png')},
-                        {label: 'BAR', src: require('../assets/img/BAR.png')}
+                        {label: '7', src: require('../assets/img/7.png')},
+                        {label: 'CHERRY', src: require('../assets/img/cherry.png')}
                     ]
                 }, {
                     items: [
-                        {label: 'CHERRY', src: require('../assets/img/cherry.png')},
-                        {label: '7', src: require('../assets/img/7.png')},
                         {label: '3xBAR', src: require('../assets/img/3xBAR.png')},
+                        {label: 'BAR', src: require('../assets/img/BAR.png')},
                         {label: '2xBAR', src: require('../assets/img/2xBAR.png')},
-                        {label: 'BAR', src: require('../assets/img/BAR.png')}
+                        {label: '7', src: require('../assets/img/7.png')},
+                        {label: 'CHERRY', src: require('../assets/img/cherry.png')}
                     ]
                 }],
                 opts: null,
