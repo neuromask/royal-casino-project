@@ -1,0 +1,94 @@
+$breakpoints: (
+  xs: 461,
+  sm: 768,
+  md: 992,
+  lg: 1200
+);
+
+@mixin breakpoint($breakpoint) {
+  @if type-of($breakpoint) == number {
+    @media screen and (max-width: #{$breakpoint}px) {
+      @content;
+    }
+  } @else {
+    @each $size in map-keys($breakpoints) {
+      @if $size == $breakpoint {
+        @media screen and (max-width: map-get($breakpoints, $size) - 1 + 'px') {
+          @content;
+        }
+      }
+    }
+  }
+}
+
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+@mixin trs($prop: all, $duration: 250ms, $easing: ease-in-out, $delay: 0ms) {
+  transition: $prop $duration $easing $delay;
+}
+
+@mixin clear {
+  @extend %clearfix;
+}
+
+@mixin hide-text {
+  overflow: hidden;
+  text-indent: -9999px;
+  white-space: nowrap;
+}
+
+@mixin absolute($top: null, $right: null, $bottom: null, $left: null) {
+  position: absolute;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+@mixin fixed($top: null, $right: null, $bottom: null, $left: null) {
+  position: fixed;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+}
+
+@mixin reset-position {
+  position: static;
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
+}
+
+@mixin responsive-ration($x, $y, $pseudo: false) {
+  $padding: unquote(($y / $x) * 100 + '%');
+
+  @if $pseudo {
+    &::before {
+      content: '';
+      display: block;
+      padding-top: $padding;
+      width: 100%;
+    }
+  } @else {
+    padding-top: $padding;
+  }
+}
+
+@mixin truncate($width) {
+  max-width: $width;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+@mixin event {
+  &:hover,
+  &:focus {
+    @content;
+  }
+}

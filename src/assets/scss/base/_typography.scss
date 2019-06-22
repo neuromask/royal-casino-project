@@ -1,0 +1,79 @@
+@font-face {
+  font-family: 'gothamrounded';
+  src: url($font-base + 'gothamrounded-light.eot');
+  src: url($font-base + 'gothamrounded-light.eot?#iefix') format('embedded-opentype'),
+  url($font-base + 'gothamrounded-light.woff2') format('woff2'),
+  url($font-base + 'gothamrounded-light.woff') format('woff'),
+  url($font-base + 'gothamrounded-light.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: $gothamrounded;
+  line-height: 1;
+}
+
+/* TYPOGRAPHY */
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+h4 {
+  font-size: 1rem;
+}
+
+h5 {
+  font-size: 0.8rem;
+}
+
+h6 {
+  font-size: 0.7rem;
+}
+
+p {
+  font-size: 1.125rem;
+  font-weight: 200;
+  line-height: 1.8;
+}
+
+.font-light {
+  font-weight: 300;
+}
+
+.font-regular {
+  font-weight: 400;
+}
+
+.font-heavy {
+  font-weight: 700;
+}
+
+/* POSITIONING */
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
+.center {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.justify {
+  text-align: justify;
+}

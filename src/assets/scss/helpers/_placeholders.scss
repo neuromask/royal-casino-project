@@ -1,0 +1,40 @@
+%clearfix {
+  &::after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
+%clearfix-full {
+  &::before {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
+%visually-hidden {
+  border: 0 !important;
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px !important;
+  left: -9999px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  position: absolute !important;
+  top: auto !important;
+  width: 1px !important;
+}
+
+%abs-center {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}

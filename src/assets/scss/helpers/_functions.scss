@@ -1,0 +1,11 @@
+@function asset($type, $file) {
+  @return url($type + '/' + $file);
+}
+
+@function image($file) {
+  @return asset($image-assets, $file);
+}
+
+@function svgIcon($file) {
+  @return asset($svg-assets, $file);
+}
