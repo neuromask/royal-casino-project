@@ -316,6 +316,7 @@
                 let value = parseInt(event.target.value);
                 if (value > max) this.balance = max;
                 if (value < min) this.balance = min;
+                this.isDisabled();
             }
         }
     }
