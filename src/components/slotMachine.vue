@@ -246,8 +246,8 @@
                     }
                 });
 
-                this.win();
                 this.isFullFinished = true;
+                this.win();
                 this.isDisabled();
 
             },
