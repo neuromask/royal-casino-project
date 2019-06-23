@@ -154,26 +154,20 @@
                 if (this.opts) { return }
 
                 // reset
+                this.balance -= 1;
                 this.winTotal = null;
                 this.winTop = null;
                 this.winCenter = null;
                 this.winBottom = null;
-                this.$refs.winTop.innerText = "";
-                this.$refs.winCenter.innerText = "";
-                this.$refs.winBottom.innerText = "";
-                this.$refs.winlineTop.style.display = "none";
-                this.$refs.winLineCenter.style.display = "none";
-                this.$refs.winLineBottom.style.display = "none";
-
-                this.balance -= 1;
-                this.disabled = true;
+                this.$refs.winTop.innerText = this.$refs.winTop.innerText = this.$refs.winBottom.innerText = "";
+                this.$refs.winlineTop.style.display = this.$refs.winLineCenter.style.display = this.$refs.winLineBottom.style.display = this.$refs.win.style.display = "none";
                 this.resultCenter = [];
                 this.resultTop = [];
-                this.resultBottom = [];
-                this.$refs.win.style.display = "none";
+                this.resultBottom  = [];
+                this.disabled = true;
 
                 this.opts = this.slots.map((data, i) => {
-                    //console.log(this.selectedSymbol[i], this.linePositionFixed[i]);
+
                     const slot = this.$refs.slots[i];
                     let choice;
                     // random or fixed mode choice from debug options
