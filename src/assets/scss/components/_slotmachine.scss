@@ -39,6 +39,9 @@
   width: 140px;
   height: 360px;
   overflow: hidden;
+  box-sizing: border-box;
+  border-right: 2px solid #d9c692;
+  border-left: 2px solid #d9c692;
 }
 
 .slot__item {
