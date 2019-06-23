@@ -269,6 +269,7 @@
                     this.$refs.win.style.display = "block";
                     this.$refs.winTotal.innerText = "Total win: " + this.winTotal;
                     this.balance += this.winTotal;
+                    this.isDisabled();
                 }
             },
             selectSymbol(event, form) {
