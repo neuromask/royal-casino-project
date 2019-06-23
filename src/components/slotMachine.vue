@@ -28,8 +28,7 @@
             <div class='debug-content'>
             <div>
                 <span class="debug-head">Balance:</span>
-                <input id="balanceDebug" type='number' min='1' max='5000' maxlength='5' name='balanceDebug' v-model='balanceDebug' oninput="(!validity.rangeOverflow||(value=this.max)) && (!validity.rangeUnderflow||(value=this.min));" />
-                <button @click='updateBalanceDebug' class="btn-balance-debug">Update</button>
+                <input id="balanceDebug" type='number' min='1' max='5000' maxlength='5' name='balanceDebug' v-model='balance' @input="inputCheck($event)" />
             </div>
             <div class='position'>
                 <span class="debug-head">Mode:</span>
@@ -123,9 +122,7 @@
                 }],
                 opts: null,
                 startedAt: null,
-                isFullFinished: false,
                 balance: 100,
-                balanceDebug: 100,
                 disabled: false,
                 winTotal: null,
                 winTop: null,
@@ -161,7 +158,6 @@
                 this.winTop = null;
                 this.winCenter = null;
                 this.winBottom = null;
-                this.isFullFinished = false;
                 this.$refs.winTop.innerText = "";
                 this.$refs.winCenter.innerText = "";
                 this.$refs.winBottom.innerText = "";
@@ -283,7 +279,6 @@
 
                 this.isDisabled();
                 this.win();
-                this.isFullFinished = true;
 
             },
             radioFixed: function () {
@@ -293,10 +288,6 @@
             radioRandom: function () {
                 this.linePosition = 0.5;
                 this.debugInputsDis = true;
-            },
-            updateBalanceDebug: function () {
-                this.balance = parseInt(this.balanceDebug);
-                if (this.isFullFinished) this.isDisabled();
             },
             isDisabled: function () {
                 if (this.balance < 1) {
@@ -318,6 +309,13 @@
             },
             selectLine(event, form) {
                 this.linePositionFixed[form] = parseInt(event.target.value);
+            },
+            inputCheck(event) {
+                let min = parseInt(event.target.getAttribute('min'));
+                let max = parseInt(event.target.getAttribute('max'));
+                let value = parseInt(event.target.value);
+                if (value > max) this.balance = max;
+                if (value < min) this.balance = min;
             }
         }
     }
