@@ -1,4 +1,5 @@
 export default {
+
   arrayEquals (array, strict) {
     if (!array)
       return false;
@@ -21,4 +22,5 @@ export default {
     }
     return true;
   }
+
 }

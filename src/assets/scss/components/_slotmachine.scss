@@ -3,7 +3,7 @@
   height: 765px;
 }
 
-.slotwrap {
+.slot-container {
   display: flex;
   flex-wrap:wrap;
   border-radius: 10px;
@@ -12,7 +12,7 @@
   top: 171px;
   left: 353px;
 }
-.slotwrap:before {
+.slot-container:before {
   background: linear-gradient(to bottom,  rgba(0,0,0,0.8) 0%,rgba(0,0,0,0) 100%);
   position: absolute;
   top:0; left:0;
@@ -21,7 +21,7 @@
   content: '';
   z-index: 1;
 }
-.slotwrap:after {
+.slot-container:after {
   background: linear-gradient(to top,  rgba(0,0,0,0.8) 0%,rgba(0,0,0,0) 100%);
   position: absolute;
   bottom:0; left:0;
@@ -91,7 +91,7 @@
   left: 95px;
   font-size: 24px;
   text-align: center;
-  width: 205px;
+  width: 215px;
 }
 .win span {
   display: block;

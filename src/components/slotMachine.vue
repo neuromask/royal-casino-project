@@ -1,6 +1,6 @@
 <template>
     <div class='slot-machine'>
-        <div class='slotwrap'>
+        <div class='slot-container'>
             <div class='slot' v-for='(slot, index) of slots' v-bind:key='index + "-label-1"' ref='slots'>
                 <div class='slot__window'>
                     <div class='slot__wrap'>
@@ -29,13 +29,13 @@
             <div>
                 <span class="debug-head">Balance:</span>
                 <input id="balanceDebug" type='number' min='1' max='5000' maxlength='5' name='balanceDebug' v-model='balanceDebug' oninput="(!validity.rangeOverflow||(value=this.max)) && (!validity.rangeUnderflow||(value=this.min));" />
-                <button  @click='updateBalanceDebug' class="btn-balance-debug">Update</button>
+                <button @click='updateBalanceDebug' class="btn-balance-debug">Update</button>
             </div>
             <div class='position'>
-                <span class="debug-head">Position:</span>
-                <input type='radio' id='random' v-on:change='radioRandom' value='random' v-model='positionDebug'>
+                <span class="debug-head">Mode:</span>
+                <input type='radio' id='random' v-on:change='radioRandom' value='random' v-model='positionMode'>
                 <label for='random'>Random</label>
-                <input type='radio' value='fixed' v-on:change='radioFixed' id='fixed' v-model='positionDebug'>
+                <input type='radio' value='fixed' v-on:change='radioFixed' id='fixed' v-model='positionMode'>
                 <label for='fixed'>Fixed</label>
             </div>
             <div>
@@ -123,6 +123,7 @@
                 }],
                 opts: null,
                 startedAt: null,
+                isFullFinished: false,
                 balance: 100,
                 balanceDebug: 100,
                 disabled: false,
@@ -130,7 +131,7 @@
                 winTop: null,
                 winCenter: null,
                 winBottom: null,
-                positionDebug: 'random',
+                positionMode: 'random',
                 debugInputsDis: true,
                 linePosition: 0.5, // 2 - bottom, 1 - top, 0 - center, 0.5 - random
                 linePositionFixed: [1, 1, 1], // 2 - bottom, 1 - top, 0 - center, 0.5 - random
@@ -160,6 +161,7 @@
                 this.winTop = null;
                 this.winCenter = null;
                 this.winBottom = null;
+                this.isFullFinished = false;
                 this.$refs.winTop.innerText = "";
                 this.$refs.winCenter.innerText = "";
                 this.$refs.winBottom.innerText = "";
@@ -178,8 +180,8 @@
                     //console.log(this.selectedSymbol[i], this.linePositionFixed[i]);
                     const slot = this.$refs.slots[i];
                     let choice;
-                    // random or selected choice from debug options
-                    if (this.positionDebug == 'random') {
+                    // random or fixed mode choice from debug options
+                    if (this.positionMode == 'random') {
                         choice = Math.floor(Math.random() * data.items.length)
                     } else {
                         this.linePosition = this.linePositionFixed[i];
@@ -211,7 +213,7 @@
                         this.resultCenter.push(data.items[choice].label);
                     }
                     // options for animation
-                    let opts = {
+                    let animationOpts = {
                         el: slot.querySelector('.slot__wrap'),
                         finalPos: choice * 180 - 90,
                         startOffset: 2000,
@@ -219,7 +221,7 @@
                         duration: 2000 + i * 500, // milliseconds
                         isFinished: false
                     };
-                    return opts
+                    return animationOpts
 
                 });
 
@@ -237,9 +239,8 @@
                     if (opt.isFinished) { return }
 
                     const timeRemaining = Math.max(opt.duration - timeDiff, 0);
-                    const power = 6;
+                    const power = 3;
                     const offset = (Math.pow(timeRemaining, power) / Math.pow(opt.duration, power)) * opt.startOffset;
-
                     // negative - slots go from top to bottom
                     const pos = -1 * Math.floor((offset + opt.finalPos) % opt.height + opt.height);
 
@@ -248,11 +249,10 @@
                     if (timeDiff > opt.duration) { opt.isFinished = true }
 
                 });
-
+                // animation check for all slots
                 if (this.opts.every(o => o.isFinished)) {
                     this.opts = null;
                     this.startedAt = null;
-                    //console.log('finished')
                     next(this.result)
                 } else {
                     next(this.animate)
@@ -260,38 +260,30 @@
 
             },
             result: function () {
-                //console.log('top', this.resultTop);
-                //console.log('center', this.resultCenter);
-                //console.log('bottom', this.resultBottom);
+                // array compare function
                 Array.prototype.equals = this.$helpers.arrayEquals;
-
+                // comparing results for three lines
                 this.lines.map((data) => {
-                    //console.log('lines', data.items);
                     if (data.items.equals(this.resultTop, false)) {
-                        //console.log('WIN - top', data.payTop);
                         this.winTop = data.payTop;
-                        this.balance += this.winTop;
                         this.$refs.winTop.innerText = "Top: " + this.winTop;
                         this.$refs.winlineTop.style.display = "block";
                     }
                     if (data.items.equals(this.resultCenter, false)) {
-                        // console.log('WIN - center', data.payCenter);
                         this.winCenter = data.payCenter;
-                        this.balance += this.winCenter;
                         this.$refs.winCenter.innerText = "Center: " + this.winCenter;
                         this.$refs.winLineCenter.style.display = "block";
                     }
                     if (data.items.equals(this.resultBottom, false)) {
-                        //console.log('WIN - bottom', data.payBottom);
                         this.winBottom = data.payBottom;
-                        this.balance += this.winBottom;
                         this.$refs.winBottom.innerText = "Bottom: " + this.winBottom;
                         this.$refs.winLineBottom.style.display = "block";
                     }
                 });
 
                 this.isDisabled();
-                this.showWin();
+                this.win();
+                this.isFullFinished = true;
 
             },
             radioFixed: function () {
@@ -304,9 +296,7 @@
             },
             updateBalanceDebug: function () {
                 this.balance = parseInt(this.balanceDebug);
-                if (this.balance > 0) {
-                    this.disabled = false;
-                }
+                if (this.isFullFinished) this.isDisabled();
             },
             isDisabled: function () {
                 if (this.balance < 1) {
@@ -315,12 +305,12 @@
                     this.disabled = false;
                 }
             },
-            showWin: function () {
-                let winTotal = this.winTop + this.winCenter + this.winBottom;
-                //console.log(winTotal);
-                if (winTotal)  {
+            win: function () {
+                this.winTotal = this.winTop + this.winCenter + this.winBottom;
+                if (this.winTotal)  {
                     this.$refs.win.style.display = "block";
-                    this.$refs.winTotal.innerText = "Total win: " + winTotal;
+                    this.$refs.winTotal.innerText = "Total win: " + this.winTotal;
+                    this.balance += this.winTotal;
                 }
             },
             selectSymbol(event, form) {
