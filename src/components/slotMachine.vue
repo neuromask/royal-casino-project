@@ -67,25 +67,9 @@
 </template>
 
 <script>
+    import json from '../assets/json/win-rates.json';
     import JQuery from 'jquery'
     let $ = JQuery;
-
-    $(document).ready(function(){
-        $( ".btn-debug" ).click(function() {
-            $( ".debug-content" ).slideToggle( "fast" );
-        });
-    });
-
-    const next = window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.msRequestAnimationFrame ||
-        window.oRequestAnimationFrame ||
-        function (cb) {
-            window.setTimeout(cb, 1000 / 60)
-    };
-
-    import json from '../assets/json/win-rates.json';
 
     export default {
         name: 'slotMachine',
@@ -314,4 +298,19 @@
             }
         }
     }
+
+    $(document).ready(function(){
+        $( ".btn-debug" ).click(function() {
+            $( ".debug-content" ).slideToggle( "fast" );
+        });
+    });
+
+    const next = window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        function (cb) {
+            window.setTimeout(cb, 1000 / 60)
+        };
 </script>
