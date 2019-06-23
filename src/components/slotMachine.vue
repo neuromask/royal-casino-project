@@ -87,22 +87,6 @@
                         {label: '7', src: require('../assets/img/7.png')},
                         {label: 'CHERRY', src: require('../assets/img/cherry.png')}
                     ]
-                }, {
-                    items: [
-                        {label: '3xBAR', src: require('../assets/img/3xBAR.png')},
-                        {label: 'BAR', src: require('../assets/img/BAR.png')},
-                        {label: '2xBAR', src: require('../assets/img/2xBAR.png')},
-                        {label: '7', src: require('../assets/img/7.png')},
-                        {label: 'CHERRY', src: require('../assets/img/cherry.png')}
-                    ]
-                }, {
-                    items: [
-                        {label: '3xBAR', src: require('../assets/img/3xBAR.png')},
-                        {label: 'BAR', src: require('../assets/img/BAR.png')},
-                        {label: '2xBAR', src: require('../assets/img/2xBAR.png')},
-                        {label: '7', src: require('../assets/img/7.png')},
-                        {label: 'CHERRY', src: require('../assets/img/cherry.png')}
-                    ]
                 }],
                 opts: null,
                 startedAt: null,
@@ -132,11 +116,16 @@
                 ]
             }
         },
+        beforeMount() {
+            this.populateSlots()
+        },
         methods: {
+            populateSlots () {
+                this.slots = new Array(3).fill(this.slots[0]);
+            },
             start: function () {
 
                 if (this.opts) { return }
-
                 // reset
                 this.balance -= 1;
                 this.winTotal = null;
