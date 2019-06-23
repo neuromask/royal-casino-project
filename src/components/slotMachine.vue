@@ -29,7 +29,7 @@
             <div>
                 <span class="debug-head">Balance:</span>
                 <input id="balanceDebug" type='number' min='1' max='5000' maxlength='5' name='balanceDebug' v-model='balanceDebug' oninput="(!validity.rangeOverflow||(value=this.max)) && (!validity.rangeUnderflow||(value=this.min));" />
-                <button  @click='updateBalance' class="btn-balance-debug">Update</button>
+                <button  @click='updateBalanceDebug' class="btn-balance-debug">Update</button>
             </div>
             <div class='position'>
                 <span class="debug-head">Position:</span>
@@ -63,11 +63,9 @@
     let $ = JQuery;
 
     $(document).ready(function(){
-
         $( ".btn-debug" ).click(function() {
             $( ".debug-content" ).slideToggle( "fast" );
         });
-
     });
 
     const next = window.requestAnimationFrame ||
@@ -89,7 +87,6 @@
         data: function () {
             return {
                 lines: json,
-                el: '#numberBox',
                 slots: [{
                     items: [
                         {label: '3xBAR', src: require('../assets/img/3xBAR.png')},
@@ -127,38 +124,21 @@
                 position: 'random',
                 debugInputsDis: true,
                 lineposition: 0.5, // 2 - bottom, 1 - top, 0 - center, 0.5 - random
+                fixedLinepPosition: [0, 1, 1], // 2 - bottom, 1 - top, 0 - center, 0.5 - random
                 selected: 0,
                 options: [
-                    {text: 'CHERRY', value: 0},
-                    {text: '7', value: 1},
-                    {text: '3xBAR', value: 2},
-                    {text: '2xBAR', value: 3},
-                    {text: 'BAR', value: 4}
+                    {text: '3xBAR', value: 0},
+                    {text: 'BAR', value: 1},
+                    {text: '2xBAR', value: 2},
+                    {text: '7', value: 3},
+                    {text: 'CHERRY', value: 4}
                 ]
-
             }
         },
         methods: {
-            radioFixed: function () {
-                this.lineposition = 1;
-                this.debugInputsDis = false;
-            },
-            radioRandom: function () {
-                this.lineposition = 0.5;
-                this.debugInputsDis = true;
-            },
-            updateBalance: function () {
-                this.balance = parseInt(this.balanceDebug);
-                //console.log(typeof this.balance, typeof this.balanceDebug);
-                if (this.balance > 0) {
-                    this.disabled = false;
-                }
-            },
             start: function () {
 
-                if (this.opts) {
-                    return
-                }
+                if (this.opts) { return }
 
                 // reset
                 this.wintotal = null;
@@ -180,9 +160,10 @@
                 this.$refs.win.style.display = "none";
 
                 this.opts = this.slots.map((data, i) => {
-
+                    console.log(this.fixedLinepPosition[i]);
                     const slot = this.$refs.slots[i];
                     let choice;
+
                     if (this.position == 'random') {
                         choice = Math.floor(Math.random() * data.items.length)
                     } else {
@@ -194,7 +175,7 @@
                     }
                     //console.log("choice", choice, data.items[choice], i, data.items.length)
 
-                    if (Math.random() < this.lineposition) {
+                    if (Math.random() < this.fixedLinepPosition[i]) {
                         // top / bottom
                         slot.querySelector('.slot__wrap').style.marginTop = '-80px';
 
@@ -214,6 +195,7 @@
                         this.resultCenter.push(data.items[choice].label);
                     }
 
+                    // options for animation
                     let opts = {
                         el: slot.querySelector('.slot__wrap'),
                         finalPos: choice * 180 - 90,
@@ -221,7 +203,6 @@
                         height: data.items.length * 180,
                         duration: 2000 + i * 500, // milliseconds
                         isFinished: false
-
                     };
                     return opts
 
@@ -232,42 +213,30 @@
             },
             animate: function (timestamp) {
 
-                if (this.startedAt == null) {
-                    this.startedAt = timestamp
-                }
+                if (this.startedAt == null) { this.startedAt = timestamp }
 
                 const timeDiff = timestamp - this.startedAt;
 
                 this.opts.forEach(opt => {
 
-                    if (opt.isFinished) {
-                        return
-                    }
+                    if (opt.isFinished) { return }
 
                     const timeRemaining = Math.max(opt.duration - timeDiff, 0);
                     const power = 6;
                     const offset = (Math.pow(timeRemaining, power) / Math.pow(opt.duration, power)) * opt.startOffset;
 
-                    // negative, such that slots move from top to bottom
+                    // negative - slots go from top to bottom
                     const pos = -1 * Math.floor((offset + opt.finalPos) % opt.height + opt.height);
 
                     opt.el.style.transform = "translateY(" + pos + "px)";
 
-                    if (timeDiff > opt.duration) {
-                        //console.log('finished', opt, pos)
-                        opt.isFinished = true
-                    }
+                    if (timeDiff > opt.duration) { opt.isFinished = true }
 
                 });
 
                 if (this.opts.every(o => o.isFinished)) {
                     this.opts = null;
                     this.startedAt = null;
-                    if (this.balance < 1) {
-                        this.disabled = true;
-                    } else {
-                        this.disabled = false;
-                    }
                     //console.log('finished')
                     next(this.result)
                 } else {
@@ -275,34 +244,12 @@
                 }
 
             },
-
             result: function () {
                 //console.log('top', this.resultTop);
                 //console.log('center', this.resultCenter);
                 //console.log('bottom', this.resultBottom);
 
-                Array.prototype.equals = function (array, strict) {
-                    if (!array)
-                        return false;
-
-                    if (arguments.length == 1)
-                        strict = true;
-
-                    if (this.length != array.length)
-                        return false;
-
-                    for (var i = 0; i < this.length; i++) {
-                        if (this[i] instanceof Array && array[i] instanceof Array) {
-                            if (!this[i].equals(array[i], strict))
-                                return false;
-                        } else if (strict && this[i] != array[i]) {
-                            return false;
-                        } else if (!strict) {
-                            return this.sort().equals(array.sort(), true);
-                        }
-                    }
-                    return true;
-                };
+                Array.prototype.equals = this.$helpers.arrayEquals;
 
                 this.lines.map((data) => {
                     //console.log('lines', data.items);
@@ -329,11 +276,38 @@
                     }
                 });
 
+                this.isDisabled();
+                this.winTotal();
+
+            },
+            radioFixed: function () {
+                this.lineposition = 1;
+                this.debugInputsDis = false;
+            },
+            radioRandom: function () {
+                this.lineposition = 0.5;
+                this.debugInputsDis = true;
+            },
+            updateBalanceDebug: function () {
+                this.balance = parseInt(this.balanceDebug);
+                if (this.balance > 0) {
+                    this.disabled = false;
+                }
+            },
+            isDisabled: function () {
+                if (this.balance < 1) {
+                    this.disabled = true;
+                } else {
+                    this.disabled = false;
+                }
+            },
+            winTotal: function () {
                 let wintotal = this.wintop + this.wincenter + this.winbottom;
                 //console.log(wintotal);
-                if (wintotal) this.$refs.win.style.display = "block";
-                this.$refs.wintotal.innerText = "Total win: " + wintotal;
-
+                if (wintotal)  {
+                    this.$refs.win.style.display = "block";
+                    this.$refs.wintotal.innerText = "Total win: " + wintotal;
+                }
             }
 
         }
