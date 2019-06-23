@@ -10,16 +10,16 @@
                     </div>
                 </div>
             </div>
-            <div class='winline winline-top' ref='winlineTop'></div>
-            <div class='winline winline-center' ref='winlineCenter'></div>
-            <div class='winline winline-bottom' ref='winlineBottom'></div>
+            <div class='win-line win-line-top' ref='winlineTop'></div>
+            <div class='win-line win-line-center' ref='winLineCenter'></div>
+            <div class='win-line win-line-bottom' ref='winLineBottom'></div>
         </div>
         <div ref='win' class='win'>
             <span class='win-image blink'><img src='../assets/img/win.png' width='215' height='179' alt='' /></span>
-            <span ref='wintop'></span>
-            <span ref='wincenter'></span>
-            <span ref='winbottom'></span>
-            <span class='wintotal' ref='wintotal'></span>
+            <span ref='winTop'></span>
+            <span ref='winCenter'></span>
+            <span ref='winBottom'></span>
+            <span class='win-total' ref='winTotal'></span>
         </div>
         <button @click='start' :disabled='disabled' class="btn-spin pulse"></button>
         <div class='balance'>Balance: <span class="balance-amount">{{ balance }}</span></div>
@@ -33,25 +33,34 @@
             </div>
             <div class='position'>
                 <span class="debug-head">Position:</span>
-                <input type='radio' id='random' v-on:change='radioRandom' value='random' v-model='position'>
+                <input type='radio' id='random' v-on:change='radioRandom' value='random' v-model='positionDebug'>
                 <label for='random'>Random</label>
-                <input type='radio' value='fixed' v-on:change='radioFixed' id='fixed' v-model='position'>
+                <input type='radio' value='fixed' v-on:change='radioFixed' id='fixed' v-model='positionDebug'>
                 <label for='fixed'>Fixed</label>
             </div>
             <div>
                 <span class="debug-head">Symbol:</span>
-                <select :disabled='debugInputsDis' v-model='selected'>
-                    <option v-for='option in options' :key='option.value' v-bind:value='option.value'>{{ option.text }}</option>
+                <select @change="selectSymbol($event, '0')" :disabled='debugInputsDis'>
+                    <option v-for='option in symbolOptions' :key='option.value' v-bind:value='option.value'>{{ option.text }}</option>
+                </select>
+                <select @change="selectSymbol($event, '1')" :disabled='debugInputsDis'>
+                    <option v-for='option in symbolOptions' :key='option.value' v-bind:value='option.value'>{{ option.text }}</option>
+                </select>
+                <select @change="selectSymbol($event, '2')" :disabled='debugInputsDis'>
+                    <option v-for='option in symbolOptions' :key='option.value' v-bind:value='option.value'>{{ option.text }}</option>
                 </select>
             </div>
             <div>
                 <span class="debug-head">Line:</span>
-                <input :disabled='debugInputsDis' type='radio' id='linetop' value='1' v-model='lineposition'>
-                <label for='linetop'>Top</label>
-                <input :disabled='debugInputsDis' type='radio' id='linecenter' value='0' v-model='lineposition'>
-                <label for='linecenter'>Center</label>
-                <input :disabled='debugInputsDis' type='radio' id='linebottom' value='2' v-model='lineposition'>
-                <label for='linebottom'>Bottom</label>
+                <select @change="selectLine($event, '0')" :disabled='debugInputsDis'>
+                    <option v-for='option in lineOptions' :key='option.value' v-bind:value='option.value'>{{ option.text }}</option>
+                </select>
+                <select @change="selectLine($event, '1')" :disabled='debugInputsDis'>
+                    <option v-for='option in lineOptions' :key='option.value' v-bind:value='option.value'>{{ option.text }}</option>
+                </select>
+                <select @change="selectLine($event, '2')" :disabled='debugInputsDis'>
+                    <option v-for='option in lineOptions' :key='option.value' v-bind:value='option.value'>{{ option.text }}</option>
+                </select>
             </div>
         </div>
         </div>
@@ -117,21 +126,27 @@
                 balance: 100,
                 balanceDebug: 100,
                 disabled: false,
-                wintotal: null,
-                wintop: null,
-                wincenter: null,
-                winbottom: null,
-                position: 'random',
+                winTotal: null,
+                winTop: null,
+                winCenter: null,
+                winBottom: null,
+                positionDebug: 'random',
                 debugInputsDis: true,
-                lineposition: 0.5, // 2 - bottom, 1 - top, 0 - center, 0.5 - random
-                fixedLinepPosition: [0, 1, 1], // 2 - bottom, 1 - top, 0 - center, 0.5 - random
-                selected: 0,
-                options: [
+                linePosition: 0.5, // 2 - bottom, 1 - top, 0 - center, 0.5 - random
+                linePositionFixed: [1, 1, 1], // 2 - bottom, 1 - top, 0 - center, 0.5 - random
+                selectedSymbolDefault: 0,
+                selectedSymbol: [0, 0, 0], // 0 - 3xBAR ..
+                symbolOptions: [
                     {text: '3xBAR', value: 0},
                     {text: 'BAR', value: 1},
                     {text: '2xBAR', value: 2},
                     {text: '7', value: 3},
                     {text: 'CHERRY', value: 4}
+                ],
+                lineOptions: [
+                    {text: 'Top', value: 1},
+                    {text: 'Center', value: 0},
+                    {text: 'Bottom', value: 2}
                 ]
             }
         },
@@ -141,16 +156,16 @@
                 if (this.opts) { return }
 
                 // reset
-                this.wintotal = null;
-                this.wintop = null;
-                this.wincenter = null;
-                this.winbottom = null;
-                this.$refs.wintop.innerText = "";
-                this.$refs.wincenter.innerText = "";
-                this.$refs.winbottom.innerText = "";
+                this.winTotal = null;
+                this.winTop = null;
+                this.winCenter = null;
+                this.winBottom = null;
+                this.$refs.winTop.innerText = "";
+                this.$refs.winCenter.innerText = "";
+                this.$refs.winBottom.innerText = "";
                 this.$refs.winlineTop.style.display = "none";
-                this.$refs.winlineCenter.style.display = "none";
-                this.$refs.winlineBottom.style.display = "none";
+                this.$refs.winLineCenter.style.display = "none";
+                this.$refs.winLineBottom.style.display = "none";
 
                 this.balance -= 1;
                 this.disabled = true;
@@ -160,26 +175,27 @@
                 this.$refs.win.style.display = "none";
 
                 this.opts = this.slots.map((data, i) => {
-                    console.log(this.fixedLinepPosition[i]);
+                    //console.log(this.selectedSymbol[i], this.linePositionFixed[i]);
                     const slot = this.$refs.slots[i];
                     let choice;
-
-                    if (this.position == 'random') {
+                    // random or selected choice from debug options
+                    if (this.positionDebug == 'random') {
                         choice = Math.floor(Math.random() * data.items.length)
                     } else {
-                        if (this.lineposition == 2) {
-                            choice = this.selected - 1;
+                        this.linePosition = this.linePositionFixed[i];
+                        if (this.linePosition == 2) {
+                            choice = this.selectedSymbol[i] - 1;
                         } else {
-                            choice = this.selected;
+                            choice = this.selectedSymbol[i];
                         }
                     }
                     //console.log("choice", choice, data.items[choice], i, data.items.length)
-
-                    if (Math.random() < this.fixedLinepPosition[i]) {
+                    // make arrays for different lines depending on choice
+                    if (Math.random() < this.linePosition) {
                         // top / bottom
                         slot.querySelector('.slot__wrap').style.marginTop = '-80px';
 
-                        if (this.lineposition == 2 && choice < 0) {
+                        if (this.linePosition == 2 && choice < 0) {
                             this.resultTop.push(data.items[data.items.length - 1].label);
                         } else {
                             this.resultTop.push(data.items[choice].label);
@@ -194,7 +210,6 @@
                         slot.querySelector('.slot__wrap').style.marginTop = '0';
                         this.resultCenter.push(data.items[choice].label);
                     }
-
                     // options for animation
                     let opts = {
                         el: slot.querySelector('.slot__wrap'),
@@ -248,44 +263,43 @@
                 //console.log('top', this.resultTop);
                 //console.log('center', this.resultCenter);
                 //console.log('bottom', this.resultBottom);
-
                 Array.prototype.equals = this.$helpers.arrayEquals;
 
                 this.lines.map((data) => {
                     //console.log('lines', data.items);
                     if (data.items.equals(this.resultTop, false)) {
                         //console.log('WIN - top', data.payTop);
-                        this.wintop = data.payTop;
-                        this.balance += this.wintop;
-                        this.$refs.wintop.innerText = "Top: " + this.wintop;
+                        this.winTop = data.payTop;
+                        this.balance += this.winTop;
+                        this.$refs.winTop.innerText = "Top: " + this.winTop;
                         this.$refs.winlineTop.style.display = "block";
                     }
                     if (data.items.equals(this.resultCenter, false)) {
                         // console.log('WIN - center', data.payCenter);
-                        this.wincenter = data.payCenter;
-                        this.balance += this.wincenter;
-                        this.$refs.wincenter.innerText = "Center: " + this.wincenter;
-                        this.$refs.winlineCenter.style.display = "block";
+                        this.winCenter = data.payCenter;
+                        this.balance += this.winCenter;
+                        this.$refs.winCenter.innerText = "Center: " + this.winCenter;
+                        this.$refs.winLineCenter.style.display = "block";
                     }
                     if (data.items.equals(this.resultBottom, false)) {
                         //console.log('WIN - bottom', data.payBottom);
-                        this.winbottom = data.payBottom;
-                        this.balance += this.winbottom;
-                        this.$refs.winbottom.innerText = "Bottom: " + this.winbottom;
-                        this.$refs.winlineBottom.style.display = "block";
+                        this.winBottom = data.payBottom;
+                        this.balance += this.winBottom;
+                        this.$refs.winBottom.innerText = "Bottom: " + this.winBottom;
+                        this.$refs.winLineBottom.style.display = "block";
                     }
                 });
 
                 this.isDisabled();
-                this.winTotal();
+                this.showWin();
 
             },
             radioFixed: function () {
-                this.lineposition = 1;
+                this.linePosition = 1;
                 this.debugInputsDis = false;
             },
             radioRandom: function () {
-                this.lineposition = 0.5;
+                this.linePosition = 0.5;
                 this.debugInputsDis = true;
             },
             updateBalanceDebug: function () {
@@ -301,15 +315,20 @@
                     this.disabled = false;
                 }
             },
-            winTotal: function () {
-                let wintotal = this.wintop + this.wincenter + this.winbottom;
-                //console.log(wintotal);
-                if (wintotal)  {
+            showWin: function () {
+                let winTotal = this.winTop + this.winCenter + this.winBottom;
+                //console.log(winTotal);
+                if (winTotal)  {
                     this.$refs.win.style.display = "block";
-                    this.$refs.wintotal.innerText = "Total win: " + wintotal;
+                    this.$refs.winTotal.innerText = "Total win: " + winTotal;
                 }
+            },
+            selectSymbol(event, form) {
+                this.selectedSymbol[form] = parseInt(event.target.value);
+            },
+            selectLine(event, form) {
+                this.linePositionFixed[form] = parseInt(event.target.value);
             }
-
         }
     }
 </script>

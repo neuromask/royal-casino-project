@@ -96,11 +96,11 @@
 .win span {
   display: block;
 }
-.wintotal {
+.win-total {
   color: $color-white;
   font-weight: bold;
 }
-.winline {
+.win-line {
   position: absolute;
   height: 3px;
   width: 96%;
@@ -111,15 +111,15 @@
   box-shadow: 0 4px 5px 0 rgba(0,0,0,0.8);
   z-index: 10;
 }
-.winline-top {
+.win-line-top {
   top: 95px;
   display: none;
 }
-.winline-center {
+.win-line-center {
   top: 175px;
   display: none;
 }
-.winline-bottom {
+.win-line-bottom {
   top: 275px;
   display: none;
 }
@@ -128,7 +128,7 @@
   position: absolute;
   top: 714px;
   right: 110px;
-  width: 300px;
+  width: 390px;
   background: $color-primary-2;
   color: $color-typo-2;
   border-bottom-left-radius: 10px;
@@ -161,7 +161,12 @@ input[type='number'] {
   padding: .4rem .6rem;
   border: 1px solid #ccc;
   border-radius: .4rem;
-  margin-right: .6rem;
+  margin-right: .3rem;
+}
+.debug select {
+  width:90px;
+  padding: .3rem .6rem;
+  font-size: .7rem;
 }
 input[type='radio'] {
   transform: scale(1.2);
