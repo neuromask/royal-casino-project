@@ -28,7 +28,7 @@
             <div class='debug-content'>
             <div>
                 <span class="debug-head">Balance:</span>
-                <input id="balanceDebug" type='number' min='1' max='5000' maxlength='5' name='balanceDebug' v-model='balance' @input="inputCheck($event)" />
+                <input id="balanceDebug" type='number' min='1' max='5000' maxlength='5' name='balanceDebug' v-model.number='balance' @input="inputCheck($event)" />
             </div>
             <div class='position'>
                 <span class="debug-head">Mode:</span>
@@ -90,6 +90,7 @@
                 }],
                 opts: null,
                 startedAt: null,
+                isFullFinished: false,
                 balance: 100,
                 disabled: false,
                 winTotal: null,
@@ -138,6 +139,7 @@
                 this.resultTop = [];
                 this.resultBottom  = [];
                 this.disabled = true;
+                this.isFullFinished = false;
 
                 this.opts = this.slots.map((data, i) => {
 
@@ -244,8 +246,9 @@
                     }
                 });
 
-                this.isDisabled();
                 this.win();
+                this.isFullFinished = true;
+                this.isDisabled();
 
             },
             radioFixed: function () {
@@ -259,7 +262,7 @@
             isDisabled: function () {
                 if (this.balance < 1) {
                     this.disabled = true;
-                } else {
+                } else if (this.isFullFinished) {
                     this.disabled = false;
                 }
             },
@@ -268,7 +271,7 @@
                 if (this.winTotal)  {
                     this.$refs.win.style.display = "block";
                     this.$refs.winTotal.innerText = "Total win: " + this.winTotal;
-                    this.balance += this.winTotal;
+                    this.balance += parseInt(this.winTotal);
                     this.isDisabled();
                 }
             },
