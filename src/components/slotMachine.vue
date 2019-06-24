@@ -10,7 +10,7 @@
                     </div>
                 </div>
             </div>
-            <div class='win-line win-line-top' ref='winlineTop'></div>
+            <div class='win-line win-line-top' ref='winLineTop'></div>
             <div class='win-line win-line-center' ref='winLineCenter'></div>
             <div class='win-line win-line-bottom' ref='winLineBottom'></div>
         </div>
@@ -134,7 +134,7 @@
                 this.winCenter = null;
                 this.winBottom = null;
                 this.$refs.winTop.innerText = this.$refs.winTop.innerText = this.$refs.winBottom.innerText = "";
-                this.$refs.winlineTop.style.display = this.$refs.winLineCenter.style.display = this.$refs.winLineBottom.style.display = this.$refs.win.style.display = "none";
+                this.$refs.winLineTop.style.display = this.$refs.winLineCenter.style.display = this.$refs.winLineBottom.style.display = this.$refs.win.style.display = "none";
                 this.resultCenter = [];
                 this.resultTop = [];
                 this.resultBottom  = [];
@@ -146,11 +146,11 @@
                     const slot = this.$refs.slots[i];
                     let choice;
                     // random or fixed mode choice from debug options
-                    if (this.positionMode == 'random') {
+                    if (this.positionMode === 'random') {
                         choice = Math.floor(Math.random() * data.items.length)
                     } else {
                         this.linePosition = this.linePositionFixed[i];
-                        if (this.linePosition == 2) {
+                        if (this.linePosition === 2) {
                             choice = this.selectedSymbol[i] - 1;
                         } else {
                             choice = this.selectedSymbol[i];
@@ -162,7 +162,7 @@
                         // top / bottom
                         slot.querySelector('.slot__wrap').style.marginTop = '-80px';
 
-                        if (this.linePosition == 2 && choice < 0) {
+                        if (this.linePosition === 2 && choice < 0) {
                             this.resultTop.push(data.items[data.items.length - 1].label);
                         } else {
                             this.resultTop.push(data.items[choice].label);
@@ -178,7 +178,7 @@
                         this.resultCenter.push(data.items[choice].label);
                     }
                     // options for animation
-                    let animationOpts = {
+                    return {
                         el: slot.querySelector('.slot__wrap'),
                         finalPos: choice * 180 - 90,
                         startOffset: 2000,
@@ -186,12 +186,9 @@
                         duration: 2000 + i * 500, // milliseconds
                         isFinished: false
                     };
-                    return animationOpts
-
                 });
-
+                // animate
                 next(this.animate)
-
             },
             animate: function (timestamp) {
 
@@ -232,7 +229,7 @@
                     if (data.items.equals(this.resultTop, false)) {
                         this.winTop = data.payTop;
                         this.$refs.winTop.innerText = "Top: " + this.winTop;
-                        this.$refs.winlineTop.style.display = "block";
+                        this.$refs.winLineTop.style.display = "block";
                     }
                     if (data.items.equals(this.resultCenter, false)) {
                         this.winCenter = data.payCenter;
