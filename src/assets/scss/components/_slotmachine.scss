@@ -145,9 +145,17 @@
 .debug-content {
   line-height: 2em;
   display: none;
-  padding: .5em 1em;
+  padding: .3em 1em;
   text-align: left;
   border-top: 1px dotted $color-primary-2-2;
+}
+.debug-content div {
+  padding: .3em 0;
+  border-top: 1px dotted $color-primary-2-2;
+}
+.debug-content div:first-child {
+  padding-top: 0;
+  border-top: none;
 }
 .debug-head {
   min-width: 4.5rem;
