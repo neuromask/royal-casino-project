@@ -7,18 +7,24 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   vertical-align: baseline
 }
 
-html {
+html, body, #app, .align {
   line-height: 1;
   height:100%;
   width:100%;
+  margin:0;
+  padding:0;
 }
 
 body {
+  font-family: $gothamrounded;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   background: $color-primary-1;
   font-size:16px;
   color: $color-typo-1;
-  height:100%;
-  width:100%;
+}
+
+#app {
   background: url($image-assets + 'bg.jpg') no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -26,28 +32,11 @@ body {
   background-size: cover;
 }
 
-#app {
-  font-family: $gothamrounded;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  margin:0;
-  padding:0;
-  height:100%;
-  width:100%;
-}
-
 .align {
-  margin: 10vh auto 0 auto;
   text-align: center;
-
-}
-.wrapper {
-  background: url($image-assets + 'table.png') no-repeat center center;
-  width: 1126px;
-  height: 765px;
-  position: relative;
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 textarea:focus, input:focus{

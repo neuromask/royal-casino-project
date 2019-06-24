@@ -1,11 +1,8 @@
 <template>
     <div id="app">
         <div class="align">
-            <div class="wrapper">
-                <slotMachine class="slotMachine" msg="Welcome to Your Vue.js App"/>
-            </div>
+            <slotMachine class="slotMachine" msg="Welcome to Your Vue.js App"/>
         </div>
-        <div></div>
     </div>
 </template>
 

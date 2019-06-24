@@ -1,6 +1,8 @@
 .slot-machine {
   width: 1126px;
   height: 765px;
+  background: url($image-assets + 'table.png') no-repeat center center;
+  position: relative;
 }
 
 .slot-container {
