@@ -9,12 +9,21 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 
 html {
   line-height: 1;
+  height:100%;
+  width:100%;
 }
 
 body {
   background: $color-primary-1;
   font-size:16px;
   color: $color-typo-1;
+  height:100%;
+  width:100%;
+  background: url($image-assets + 'bg.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 #app {
@@ -22,31 +31,23 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin:0;
   padding:0;
+  height:100%;
+  width:100%;
 }
 
 .align {
+  margin: 10vh auto 0 auto;
+  text-align: center;
+
 }
 .wrapper {
   background: url($image-assets + 'table.png') no-repeat center center;
   width: 1126px;
   height: 765px;
   position: relative;
-}
-.background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url($image-assets + 'bg.jpg');
-  background-size: cover;
-  background-position: center center;
-  z-index: -1;
+  display: inline-block;
 }
 
 textarea:focus, input:focus{
