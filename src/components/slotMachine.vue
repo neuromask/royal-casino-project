@@ -13,15 +13,15 @@
                         </div>
                     </div>
                 </div>
-                <div class='win-line win-line-top' ref='winLineTop'></div>
-                <div class='win-line win-line-center' ref='winLineCenter'></div>
-                <div class='win-line win-line-bottom' ref='winLineBottom'></div>
+                <div v-for="i in lineOptions.length" :key="i">
+                    <div ref="winLine" :class="'win-line win-line-' + (i-1)"></div>
+                </div>
             </div>
             <div ref='win' class='win'>
                 <span class='win-image blink'><img src='../assets/img/win.png' width='215' height='179' alt='' /></span>
-                <span ref='winTop'></span>
-                <span ref='winCenter'></span>
-                <span ref='winBottom'></span>
+                <div v-for="i in lineOptions.length" :key="i">
+                    <span ref="winShow" :class="'win-show win-show-' + (i-1)"></span>
+                </div>
                 <span class='win-total' ref='winTotal'></span>
             </div>
             <button @click='start' :disabled='disabled' class="btn-spin pulse"></button>
@@ -87,9 +87,6 @@
                 balance: 100,
                 disabled: false,
                 winTotal: null,
-                winTop: null,
-                winCenter: null,
-                winBottom: null,
                 positionMode: 'random',
                 debugInputsDis: true,
                 selectedSymbol: [0, 0, 0], // 0 - 3xBAR ..
@@ -113,8 +110,11 @@
                 // reset
                 this.balance -= 1;
                 this.winTotal = null;
-                this.$refs.winTop.innerText = this.$refs.winCenter.innerText = this.$refs.winBottom.innerText = "";
-                this.$refs.winLineTop.style.display = this.$refs.winLineCenter.style.display = this.$refs.winLineBottom.style.display = this.$refs.win.style.display = "none";
+                this.$refs.win.style.display = "none";
+                for (let i in this.lineOptions) {
+                    this.$refs.winShow[i].innerText = '';
+                    this.$refs.winLine[i].style.display = "none";
+                }
                 this.winResult = [[],[],[]];
                 this.disabled = true;
                 this.isFullFinished = false;
@@ -199,24 +199,16 @@
 
             },
             result: function () {
-                // array compare function
-                Array.prototype.equals = this.$helpers.arrayEquals;
                 // comparing results for three lines
                 for (let entry of this.lines) {
-                    if (entry.items.equals(this.winResult[0], false)) {
-                        this.winTotal += entry.payTop;
-                        this.$refs.winTop.innerText = this.lineOptions[0].text + ": " + entry.payTop;
-                        this.$refs.winLineTop.style.display = "block";
-                    }
-                    if (entry.items.equals(this.winResult[1], false)) {
-                        this.winTotal += entry.payCenter;
-                        this.$refs.winCenter.innerText = this.lineOptions[1].text + ": " + entry.payCenter;
-                        this.$refs.winLineCenter.style.display = "block";
-                    }
-                    if (entry.items.equals(this.winResult[2], false)) {
-                        this.winTotal += entry.payBottom;
-                        this.$refs.winBottom.innerText = this.lineOptions[2].text + ": " + entry.payBottom;
-                        this.$refs.winLineBottom.style.display = "block";
+                    for (let i in this.lineOptions) {
+                        let array1 = this.winResult[i];
+                        let array2 = entry.items;
+                        if (array1.length === array2.length && array1.sort().every(function(value, index) { return value === array2.sort()[index]})) {
+                            this.winTotal += entry.payOut[i];
+                            this.$refs.winShow[i].innerText = this.lineOptions[i].text + ": " + entry.payOut[i];
+                            this.$refs.winLine[i].style.display = "block";
+                        }
                     }
                 }
 

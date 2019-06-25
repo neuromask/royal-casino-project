@@ -1,127 +1,170 @@
-[{
+[
+  {
     "items": [
       "CHERRY",
       "CHERRY",
       "CHERRY"
     ],
-    "payTop": 2000,
-    "payCenter": 1000,
-    "payBottom": 4000
-  }, {
+    "payOut": [
+      2000,
+      1000,
+      4000
+    ]
+  },
+  {
     "items": [
       "7",
       "7",
       "7"
     ],
-    "payTop": 150,
-    "payCenter": 150,
-    "payBottom": 150
-  }, {
+    "payOut": [
+      150,
+      150,
+      150
+    ]
+  },
+  {
     "items": [
       "CHERRY",
       "CHERRY",
       "7"
     ],
-    "payTop": 75,
-    "payCenter": 75,
-    "payBottom": 75
-  }, {
+    "payOut": [
+      75,
+      75,
+      75
+    ]
+  },
+  {
     "items": [
       "CHERRY",
       "7",
       "7"
     ],
-    "payTop": 75,
-    "payCenter": 75,
-    "payBottom": 75
-  }, {
+    "payOut": [
+      75,
+      75,
+      75
+    ]
+  },
+  {
     "items": [
       "3xBAR",
       "3xBAR",
       "3xBAR"
     ],
-    "payTop": 50,
-    "payCenter": 50,
-    "payBottom": 50
-  }, {
+    "payOut": [
+      50,
+      50,
+      50
+    ]
+  },
+  {
     "items": [
       "2xBAR",
       "2xBAR",
       "2xBAR"
     ],
-    "payTop": 20,
-    "payCenter": 20,
-    "payBottom": 20
-  }, {
+    "payOut": [
+      20,
+      20,
+      20
+    ]
+  },
+  {
     "items": [
       "BAR",
       "BAR",
       "BAR"
     ],
-    "payTop": 10,
-    "payCenter": 10,
-    "payBottom": 10
-  }, {
+    "payOut": [
+      10,
+      10,
+      10
+    ]
+  },
+  {
     "items": [
       "3xBAR",
       "2xBAR",
       "BAR"
     ],
-    "payTop": 5,
-    "payCenter": 5,
-    "payBottom": 5
-  }, {
+    "payOut": [
+      5,
+      5,
+      5
+    ]
+  },
+  {
     "items": [
       "BAR",
       "BAR",
       "3xBAR"
     ],
-    "payTop": 5,
-    "payCenter": 5,
-    "payBottom": 5
-  }, {
+    "payOut": [
+      5,
+      5,
+      5
+    ]
+  },
+  {
     "items": [
       "BAR",
       "BAR",
       "2xBAR"
     ],
-    "payTop": 5,
-    "payCenter": 5,
-    "payBottom": 5
-  }, {
+    "payOut": [
+      5,
+      5,
+      5
+    ]
+  },
+  {
     "items": [
       "3xBAR",
       "3xBAR",
       "BAR"
     ],
-    "payTop": 5,
-    "payCenter": 5,
-    "payBottom": 5
-  }, {
+    "payOut": [
+      5,
+      5,
+      5
+    ]
+  },
+  {
     "items": [
       "3xBAR",
       "3xBAR",
       "2xBAR"
     ],
-    "payTop": 5,
-    "payCenter": 5,
-    "payBottom": 5
-  }, {
+    "payOut": [
+      5,
+      5,
+      5
+    ]
+  },
+  {
     "items": [
       "2xBAR",
       "2xBAR",
       "BAR"
     ],
-    "payTop": 5,
-    "payCenter": 5,
-    "payBottom": 5
-  }, {
+    "payOut": [
+      5,
+      5,
+      5
+    ]
+  },
+  {
     "items": [
       "2xBAR",
       "2xBAR",
       "3xBAR"
     ],
-    "payTop": 5,
-    "payCenter": 5,
-    "payBottom": 5
-  }]
+    "payOut": [
+      5,
+      5,
+      5
+    ]
+  }
+]
