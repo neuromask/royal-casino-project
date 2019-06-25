@@ -12,8 +12,8 @@ Here are the steps I made:
 3) Slot machine graphic mock-up in Adobe Illustrator and Adobe Photoshop.
 4) Project in IDE PhpStorm, graphics and code combined, styles added - according to task.
 
-NOTE: I have added separate input field to update balance in debug area, since I think it should be used only for debugging purpose. 
-
+<p>NOTE: I have added separate input field to update balance in debug area, since I think it should be used only for debugging purpose.</p>
+<p>ADDITIONAL: I have researched different array comparing functions. I have been running performance tests on some of the more simple examples here with the following results: <a href='http://jsben.ch/vB3Qn'>here (http://jsben.ch/vB3Qn)</a>.</p>
 ## Project description
 Slot machine simulation web-app running under Google Chrome.
 
