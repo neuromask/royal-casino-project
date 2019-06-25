@@ -41,25 +41,13 @@
                 </div>
                 <div>
                     <span class="debug-head">Symbol:</span>
-                    <select @change="selectSymbol($event, '0')" :disabled='debugInputsDis'>
-                        <option v-for='(option, index) in slots[0].items' :key='option.id' :value='index'>{{ option.label }}</option>
-                    </select>
-                    <select @change="selectSymbol($event, '1')" :disabled='debugInputsDis'>
-                        <option v-for='(option, index) in slots[0].items' :key='option.id' :value='index'>{{ option.label }}</option>
-                    </select>
-                    <select @change="selectSymbol($event, '2')" :disabled='debugInputsDis'>
+                    <select v-for="i in slotsAmount" :key="i" @change="selectSymbol($event, i-1)" :disabled='debugInputsDis'>
                         <option v-for='(option, index) in slots[0].items' :key='option.id' :value='index'>{{ option.label }}</option>
                     </select>
                 </div>
                 <div>
                     <span class="debug-head">Line:</span>
-                    <select @change="selectLine($event, '0')" :disabled='debugInputsDis'>
-                        <option v-for='option in lineOptions' :key='option.value' :value='option.value'>{{ option.text }}</option>
-                    </select>
-                    <select @change="selectLine($event, '1')" :disabled='debugInputsDis'>
-                        <option v-for='option in lineOptions' :key='option.value' :value='option.value'>{{ option.text }}</option>
-                    </select>
-                    <select @change="selectLine($event, '2')" :disabled='debugInputsDis'>
+                    <select v-for="i in slotsAmount" :key="i" @change="selectLine($event, i-1)" :disabled='debugInputsDis'>
                         <option v-for='option in lineOptions' :key='option.value' :value='option.value'>{{ option.text }}</option>
                     </select>
                 </div>
