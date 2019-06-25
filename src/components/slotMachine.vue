@@ -165,7 +165,7 @@
                     };
                 });
                 // animate
-                next(this.animate)
+                this.animate()
             },
             animate: function (timestamp) {
 
@@ -192,7 +192,7 @@
                 if (this.opts.every(o => o.isFinished)) {
                     this.opts = null;
                     this.startedAt = null;
-                    next(this.result)
+                    this.result()
                 } else {
                     next(this.animate)
                 }
