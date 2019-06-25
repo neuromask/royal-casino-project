@@ -202,23 +202,23 @@
                 // array compare function
                 Array.prototype.equals = this.$helpers.arrayEquals;
                 // comparing results for three lines
-                this.lines.map((data) => {
-                    if (data.items.equals(this.winResult[0], false)) {
-                        this.winTotal += data.payTop;
-                        this.$refs.winTop.innerText = this.lineOptions[0].text + ": " + data.payTop;
+                for (let entry of this.lines) {
+                    if (entry.items.equals(this.winResult[0], false)) {
+                        this.winTotal += entry.payTop;
+                        this.$refs.winTop.innerText = this.lineOptions[0].text + ": " + entry.payTop;
                         this.$refs.winLineTop.style.display = "block";
                     }
-                    if (data.items.equals(this.winResult[1], false)) {
-                        this.winTotal += data.payCenter;
-                        this.$refs.winCenter.innerText = this.lineOptions[1].text + ": " + data.payCenter;
+                    if (entry.items.equals(this.winResult[1], false)) {
+                        this.winTotal += entry.payCenter;
+                        this.$refs.winCenter.innerText = this.lineOptions[1].text + ": " + entry.payCenter;
                         this.$refs.winLineCenter.style.display = "block";
                     }
-                    if (data.items.equals(this.winResult[2], false)) {
-                        this.winTotal += data.payBottom;
-                        this.$refs.winBottom.innerText = this.lineOptions[2].text + ": " + data.payBottom;
+                    if (entry.items.equals(this.winResult[2], false)) {
+                        this.winTotal += entry.payBottom;
+                        this.$refs.winBottom.innerText = this.lineOptions[2].text + ": " + entry.payBottom;
                         this.$refs.winLineBottom.style.display = "block";
                     }
-                });
+                }
 
                 this.isFullFinished = true;
                 this.win();
