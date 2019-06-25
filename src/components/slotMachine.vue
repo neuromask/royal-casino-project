@@ -197,9 +197,9 @@
                 // comparing results for three lines
                 for (let entry of this.lines) {
                     for (let i in this.lineOptions) {
-                        let array1 = this.winResult[i];
-                        let array2 = entry.items;
-                        if (array1.length === array2.length && array1.sort().every(function(value, index) { return value === array2.sort()[index]})) {
+                        let a1 = this.winResult[i];
+                        let a2 = entry.items;
+                        if (this.compareArrays(a1, a2)) {
                             this.winTotal += entry.payOut[i];
                             this.$refs.winShow[i].innerText = this.lineOptions[i].text + ": " + entry.payOut[i];
                             this.$refs.winLine[i].style.display = "block";
@@ -211,6 +211,9 @@
                 this.win();
                 this.isDisabled();
 
+            },
+            compareArrays: function(a1, a2) {
+                return a1.length === a2.length && a1.sort().every((v,i)=> v === a2.sort()[i]);
             },
             radioFixed: function () {
                 this.linePosition = 1;
