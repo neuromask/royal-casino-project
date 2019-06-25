@@ -42,13 +42,13 @@
                 <div>
                     <span class="debug-head">Symbol:</span>
                     <select @change="selectSymbol($event, '0')" :disabled='debugInputsDis'>
-                        <option v-for='option in symbolOptions' :key='option.id' :value='option.value'>{{ option.text }}</option>
+                        <option v-for='(option, index) in slots[0].items' :key='option.id' :value='index'>{{ option.label }}</option>
                     </select>
                     <select @change="selectSymbol($event, '1')" :disabled='debugInputsDis'>
-                        <option v-for='option in symbolOptions' :key='option.id' :value='option.value'>{{ option.text }}</option>
+                        <option v-for='(option, index) in slots[0].items' :key='option.id' :value='index'>{{ option.label }}</option>
                     </select>
                     <select @change="selectSymbol($event, '2')" :disabled='debugInputsDis'>
-                        <option v-for='option in symbolOptions' :key='option.id' :value='option.value'>{{ option.text }}</option>
+                        <option v-for='(option, index) in slots[0].items' :key='option.id' :value='index'>{{ option.label }}</option>
                     </select>
                 </div>
                 <div>
@@ -102,17 +102,9 @@
                 winBottom: null,
                 positionMode: 'random',
                 debugInputsDis: true,
+                selectedSymbol: [0, 0, 0], // 0 - 3xBAR ..
                 linePosition: 0.5, // 2 - bottom, 1 - top, 0 - center, 0.5 - random
                 linePositionFixed: [1, 1, 1], // 2 - bottom, 1 - top, 0 - center, 0.5 - random
-                selectedSymbolDefault: 0,
-                selectedSymbol: [0, 0, 0], // 0 - 3xBAR ..
-                symbolOptions: [
-                    {text: '3xBAR', value: 0},
-                    {text: 'BAR', value: 1},
-                    {text: '2xBAR', value: 2},
-                    {text: '7', value: 3},
-                    {text: 'CHERRY', value: 4}
-                ],
                 lineOptions: [
                     {text: 'Top', value: 1},
                     {text: 'Center', value: 0},
