@@ -106,6 +106,7 @@
         },
         methods: {
             start: function () {
+
                 if (this.opts) { return }
                 // reset
                 this.balance -= 1;
@@ -170,23 +171,17 @@
             animate: function (timestamp) {
 
                 if (this.startedAt == null) { this.startedAt = timestamp }
-
                 const timeDiff = timestamp - this.startedAt;
 
                 this.opts.forEach(opt => {
-
                     if (opt.isFinished) { return }
-
                     const timeRemaining = Math.max(opt.duration - timeDiff, 0);
                     const power = 3;
                     const offset = (Math.pow(timeRemaining, power) / Math.pow(opt.duration, power)) * opt.startOffset;
                     // negative - slots go from top to bottom
                     const pos = -1 * Math.floor((offset + opt.finalPos) % opt.height + opt.height);
-
                     opt.el.style.transform = "translateY(" + pos + "px)";
-
                     if (timeDiff > opt.duration) { opt.isFinished = true }
-
                 });
                 // animation check for all slots
                 if (this.opts.every(o => o.isFinished)) {
