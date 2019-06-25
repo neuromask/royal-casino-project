@@ -112,7 +112,7 @@
                 this.balance -= 1;
                 this.winTotal = null;
                 this.$refs.win.style.display = "none";
-                for (let i in this.lineOptions) {
+                for (let i = 0; i < this.lineOptions.length; i++) {
                     this.$refs.winShow[i].innerText = '';
                     this.$refs.winLine[i].style.display = "none";
                 }
@@ -196,7 +196,7 @@
             result: function () {
                 // comparing results for three lines
                 for (let entry of this.lines) {
-                    for (let i in this.lineOptions) {
+                    for (let i = 0; i < this.lineOptions.length; i++) {
                         if (this.compareArrays(this.winResult[i], entry.items)) {
                             this.winTotal += entry.payOut[i];
                             this.$refs.winShow[i].innerText = this.lineOptions[i].text + ": " + entry.payOut[i];
