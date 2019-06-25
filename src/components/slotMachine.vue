@@ -1,12 +1,14 @@
 <template>
     <div class='slot-machine'>
         <div class='slot-container'>
-            <div class='slot' v-for='(slot, index) of slots' v-bind:key='index + "-label-1"' ref='slots'>
+            <div class='slot' v-for='slot in populateSlots' :key='slot.id' ref='slots'>
                 <div class='slot__window'>
                     <div class='slot__wrap'>
-                        <div class='slot__item' v-for='(opt, index) of slot.items' v-bind:key='index + "-one"'><img :src='opt.src' width='140' height='120' :alt='opt.label' /></div>
-                        <div class='slot__item' v-for='(opt, index) of slot.items' v-bind:key='index + "-two"'><img :src='opt.src' width='140' height='120' :alt='opt.label' /></div>
-                        <div class='slot__item' v-for='(opt, index) of slot.items' v-bind:key='index + "-three"'><img :src='opt.src' width='140' height='120' :alt='opt.label' /></div>
+                        <div v-for="index in slotsAmount" :key="index">
+                            <div class='slot__item' v-for='opt in slot.items' :key='opt.id'>
+                                <img :src='opt.src' width='140' height='120' :alt='opt.label' />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -26,42 +28,42 @@
         <div class='debug'>
             <p class="btn-debug">Debug</p>
             <div class='debug-content'>
-            <div>
-                <span class="debug-head">Balance:</span>
-                <input id="balanceDebug" type='number' min='1' max='5000' maxlength='5' name='balanceDebug' v-model.number='balance' @input="inputCheck($event)" />
+                <div>
+                    <span class="debug-head">Balance:</span>
+                    <input id="balanceDebug" type='number' min='1' max='5000' maxlength='5' name='balanceDebug' v-model.number='balance' @input="inputCheck($event)" />
+                </div>
+                <div class='position'>
+                    <span class="debug-head">Mode:</span>
+                    <input type='radio' id='random' @change='radioRandom' value='random' v-model='positionMode'>
+                    <label for='random'>Random</label>
+                    <input type='radio' value='fixed' @change='radioFixed' id='fixed' v-model='positionMode'>
+                    <label for='fixed'>Fixed</label>
+                </div>
+                <div>
+                    <span class="debug-head">Symbol:</span>
+                    <select @change="selectSymbol($event, '0')" :disabled='debugInputsDis'>
+                        <option v-for='option in symbolOptions' :key='option.id' :value='option.value'>{{ option.text }}</option>
+                    </select>
+                    <select @change="selectSymbol($event, '1')" :disabled='debugInputsDis'>
+                        <option v-for='option in symbolOptions' :key='option.id' :value='option.value'>{{ option.text }}</option>
+                    </select>
+                    <select @change="selectSymbol($event, '2')" :disabled='debugInputsDis'>
+                        <option v-for='option in symbolOptions' :key='option.id' :value='option.value'>{{ option.text }}</option>
+                    </select>
+                </div>
+                <div>
+                    <span class="debug-head">Line:</span>
+                    <select @change="selectLine($event, '0')" :disabled='debugInputsDis'>
+                        <option v-for='option in lineOptions' :key='option.value' :value='option.value'>{{ option.text }}</option>
+                    </select>
+                    <select @change="selectLine($event, '1')" :disabled='debugInputsDis'>
+                        <option v-for='option in lineOptions' :key='option.value' :value='option.value'>{{ option.text }}</option>
+                    </select>
+                    <select @change="selectLine($event, '2')" :disabled='debugInputsDis'>
+                        <option v-for='option in lineOptions' :key='option.value' :value='option.value'>{{ option.text }}</option>
+                    </select>
+                </div>
             </div>
-            <div class='position'>
-                <span class="debug-head">Mode:</span>
-                <input type='radio' id='random' v-on:change='radioRandom' value='random' v-model='positionMode'>
-                <label for='random'>Random</label>
-                <input type='radio' value='fixed' v-on:change='radioFixed' id='fixed' v-model='positionMode'>
-                <label for='fixed'>Fixed</label>
-            </div>
-            <div>
-                <span class="debug-head">Symbol:</span>
-                <select @change="selectSymbol($event, '0')" :disabled='debugInputsDis'>
-                    <option v-for='option in symbolOptions' :key='option.value' v-bind:value='option.value'>{{ option.text }}</option>
-                </select>
-                <select @change="selectSymbol($event, '1')" :disabled='debugInputsDis'>
-                    <option v-for='option in symbolOptions' :key='option.value' v-bind:value='option.value'>{{ option.text }}</option>
-                </select>
-                <select @change="selectSymbol($event, '2')" :disabled='debugInputsDis'>
-                    <option v-for='option in symbolOptions' :key='option.value' v-bind:value='option.value'>{{ option.text }}</option>
-                </select>
-            </div>
-            <div>
-                <span class="debug-head">Line:</span>
-                <select @change="selectLine($event, '0')" :disabled='debugInputsDis'>
-                    <option v-for='option in lineOptions' :key='option.value' v-bind:value='option.value'>{{ option.text }}</option>
-                </select>
-                <select @change="selectLine($event, '1')" :disabled='debugInputsDis'>
-                    <option v-for='option in lineOptions' :key='option.value' v-bind:value='option.value'>{{ option.text }}</option>
-                </select>
-                <select @change="selectLine($event, '2')" :disabled='debugInputsDis'>
-                    <option v-for='option in lineOptions' :key='option.value' v-bind:value='option.value'>{{ option.text }}</option>
-                </select>
-            </div>
-        </div>
         </div>
     </div>
 </template>
@@ -88,6 +90,7 @@
                         {label: 'CHERRY', src: require('../assets/img/cherry.png')}
                     ]
                 }],
+                slotsAmount: 3,
                 opts: null,
                 startedAt: null,
                 isFullFinished: false,
@@ -117,15 +120,13 @@
                 ]
             }
         },
-        beforeMount() {
-            this.populateSlots()
+        computed: {
+            populateSlots() {
+                return new Array(this.slotsAmount).fill(this.slots[0]);
+            }
         },
         methods: {
-            populateSlots () {
-                this.slots = new Array(3).fill(this.slots[0]);
-            },
             start: function () {
-
                 if (this.opts) { return }
                 // reset
                 this.balance -= 1;
@@ -141,8 +142,7 @@
                 this.disabled = true;
                 this.isFullFinished = false;
 
-                this.opts = this.slots.map((data, i) => {
-
+                this.opts = this.populateSlots.map((data, i) => {
                     const slot = this.$refs.slots[i];
                     let choice;
                     // random or fixed mode choice from debug options
