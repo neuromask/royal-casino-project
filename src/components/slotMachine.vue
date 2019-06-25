@@ -197,9 +197,7 @@
                 // comparing results for three lines
                 for (let entry of this.lines) {
                     for (let i in this.lineOptions) {
-                        let a1 = this.winResult[i];
-                        let a2 = entry.items;
-                        if (this.compareArrays(a1, a2)) {
+                        if (this.compareArrays(this.winResult[i], entry.items)) {
                             this.winTotal += entry.payOut[i];
                             this.$refs.winShow[i].innerText = this.lineOptions[i].text + ": " + entry.payOut[i];
                             this.$refs.winLine[i].style.display = "block";
