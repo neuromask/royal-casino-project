@@ -1,55 +1,57 @@
 <template>
     <div class='slot-machine'>
-        <div class='slot-container'>
-            <div class='slot' v-for='slot in populateSlots' :key='slot.id' ref='slots'>
-                <div class='slot__window'>
-                    <div class='slot__wrap'>
-                        <div v-for="index in slotsAmount" :key="index">
-                            <div class='slot__item' v-for='opt in slot.items' :key='opt.id'>
-                                <img :src='opt.src' width='140' height='120' :alt='opt.label' />
+        <div class='slot-wrapper'>
+            <div class='slot-container'>
+                <div class='slot' v-for='slot in populateSlots' :key='slot.id' ref='slots'>
+                    <div class='slot__window'>
+                        <div class='slot__wrap'>
+                            <div v-for="index in slotsAmount" :key="index">
+                                <div class='slot__item' v-for='opt in slot.items' :key='opt.id'>
+                                    <img :src='opt.src' width='140' height='120' :alt='opt.label' />
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class='win-line win-line-top' ref='winLineTop'></div>
+                <div class='win-line win-line-center' ref='winLineCenter'></div>
+                <div class='win-line win-line-bottom' ref='winLineBottom'></div>
             </div>
-            <div class='win-line win-line-top' ref='winLineTop'></div>
-            <div class='win-line win-line-center' ref='winLineCenter'></div>
-            <div class='win-line win-line-bottom' ref='winLineBottom'></div>
-        </div>
-        <div ref='win' class='win'>
-            <span class='win-image blink'><img src='../assets/img/win.png' width='215' height='179' alt='' /></span>
-            <span ref='winTop'></span>
-            <span ref='winCenter'></span>
-            <span ref='winBottom'></span>
-            <span class='win-total' ref='winTotal'></span>
-        </div>
-        <button @click='start' :disabled='disabled' class="btn-spin pulse"></button>
-        <div class='balance'>Balance: <span class="balance-amount">{{ balance }}</span></div>
-        <div class='debug'>
-            <p class="btn-debug">Debug</p>
-            <div class='debug-content'>
-                <div>
-                    <span class="debug-head">Balance:</span>
-                    <input id="balanceDebug" type='number' min='1' max='5000' maxlength='5' name='balanceDebug' v-model.number='balance' @input="inputCheck($event)" />
-                </div>
-                <div class='position'>
-                    <span class="debug-head">Mode:</span>
-                    <input type='radio' id='random' @change='radioRandom' value='random' v-model='positionMode'>
-                    <label for='random'>Random</label>
-                    <input type='radio' value='fixed' @change='radioFixed' id='fixed' v-model='positionMode'>
-                    <label for='fixed'>Fixed</label>
-                </div>
-                <div>
-                    <span class="debug-head">Symbol:</span>
-                    <select v-for="i in slotsAmount" :key="i" @change="selectSymbol($event, i-1)" :disabled='debugInputsDis'>
-                        <option v-for='(option, index) in slots[0].items' :key='option.id' :value='index'>{{ option.label }}</option>
-                    </select>
-                </div>
-                <div>
-                    <span class="debug-head">Line:</span>
-                    <select v-for="i in slotsAmount" :key="i" @change="selectLine($event, i-1)" :disabled='debugInputsDis'>
-                        <option v-for='option in lineOptions' :key='option.value' :value='option.value'>{{ option.text }}</option>
-                    </select>
+            <div ref='win' class='win'>
+                <span class='win-image blink'><img src='../assets/img/win.png' width='215' height='179' alt='' /></span>
+                <span ref='winTop'></span>
+                <span ref='winCenter'></span>
+                <span ref='winBottom'></span>
+                <span class='win-total' ref='winTotal'></span>
+            </div>
+            <button @click='start' :disabled='disabled' class="btn-spin pulse"></button>
+            <div class='balance'>Balance: <span class="balance-amount">{{ balance }}</span></div>
+            <div class='debug'>
+                <p class="btn-debug">Debug</p>
+                <div class='debug-content'>
+                    <div>
+                        <span class="debug-head">Balance:</span>
+                        <input id="balanceDebug" type='number' min='1' max='5000' maxlength='5' name='balanceDebug' v-model.number='balance' @input="inputCheck($event)" />
+                    </div>
+                    <div class='position'>
+                        <span class="debug-head">Mode:</span>
+                        <input type='radio' id='random' @change='radioRandom' value='random' v-model='positionMode'>
+                        <label for='random'>Random</label>
+                        <input type='radio' value='fixed' @change='radioFixed' id='fixed' v-model='positionMode'>
+                        <label for='fixed'>Fixed</label>
+                    </div>
+                    <div>
+                        <span class="debug-head">Symbol:</span>
+                        <select v-for="i in slotsAmount" :key="i" @change="selectSymbol($event, i-1)" :disabled='debugInputsDis'>
+                            <option v-for='(option, index) in slots[0].items' :key='option.id' :value='index'>{{ option.label }}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <span class="debug-head">Line:</span>
+                        <select v-for="i in slotsAmount" :key="i" @change="selectLine($event, i-1)" :disabled='debugInputsDis'>
+                            <option v-for='option in lineOptions' :key='option.value' :value='option.value'>{{ option.text }}</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -111,14 +113,9 @@
                 // reset
                 this.balance -= 1;
                 this.winTotal = null;
-                this.winTop = null;
-                this.winCenter = null;
-                this.winBottom = null;
                 this.$refs.winTop.innerText = this.$refs.winTop.innerText = this.$refs.winBottom.innerText = "";
                 this.$refs.winLineTop.style.display = this.$refs.winLineCenter.style.display = this.$refs.winLineBottom.style.display = this.$refs.win.style.display = "none";
-                this.resultCenter = [];
-                this.resultTop = [];
-                this.resultBottom  = [];
+                this.winResult = [[],[],[]];
                 this.disabled = true;
                 this.isFullFinished = false;
 
@@ -143,19 +140,19 @@
                         slot.querySelector('.slot__wrap').style.marginTop = '-80px';
 
                         if (this.linePosition === 2 && choice < 0) {
-                            this.resultTop.push(data.items[data.items.length - 1].label);
+                            this.winResult[0].push(data.items[data.items.length - 1].label);
                         } else {
-                            this.resultTop.push(data.items[choice].label);
+                            this.winResult[0].push(data.items[choice].label);
                         }
                         if (choice === data.items.length - 1) {
-                            this.resultBottom.push(data.items[0].label);
+                            this.winResult[2].push(data.items[0].label);
                         } else {
-                            this.resultBottom.push(data.items[choice + 1].label);
+                            this.winResult[2].push(data.items[choice + 1].label);
                         }
                     } else {
                         // center
                         slot.querySelector('.slot__wrap').style.marginTop = '0';
-                        this.resultCenter.push(data.items[choice].label);
+                        this.winResult[1].push(data.items[choice].label);
                     }
                     // options for animation
                     return {
@@ -206,19 +203,19 @@
                 Array.prototype.equals = this.$helpers.arrayEquals;
                 // comparing results for three lines
                 this.lines.map((data) => {
-                    if (data.items.equals(this.resultTop, false)) {
-                        this.winTop = data.payTop;
-                        this.$refs.winTop.innerText = "Top: " + this.winTop;
+                    if (data.items.equals(this.winResult[0], false)) {
+                        this.winTotal += data.payTop;
+                        this.$refs.winTop.innerText = this.lineOptions[0].text + ": " + data.payTop;
                         this.$refs.winLineTop.style.display = "block";
                     }
-                    if (data.items.equals(this.resultCenter, false)) {
-                        this.winCenter = data.payCenter;
-                        this.$refs.winCenter.innerText = "Center: " + this.winCenter;
+                    if (data.items.equals(this.winResult[1], false)) {
+                        this.winTotal += data.payCenter;
+                        this.$refs.winCenter.innerText = this.lineOptions[1].text + ": " + data.payCenter;
                         this.$refs.winLineCenter.style.display = "block";
                     }
-                    if (data.items.equals(this.resultBottom, false)) {
-                        this.winBottom = data.payBottom;
-                        this.$refs.winBottom.innerText = "Bottom: " + this.winBottom;
+                    if (data.items.equals(this.winResult[2], false)) {
+                        this.winTotal += data.payBottom;
+                        this.$refs.winBottom.innerText = this.lineOptions[2].text + ": " + data.payBottom;
                         this.$refs.winLineBottom.style.display = "block";
                     }
                 });
@@ -244,7 +241,6 @@
                 }
             },
             win: function () {
-                this.winTotal = this.winTop + this.winCenter + this.winBottom;
                 if (this.winTotal)  {
                     this.$refs.win.style.display = "block";
                     this.$refs.winTotal.innerText = "Total win: " + this.winTotal;
